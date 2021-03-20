@@ -48,8 +48,11 @@ The use of the code:
 python make_data.py --nlp_path /home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05 --data_path 'data/DMCNN/train*' --output_path 'data_file/DMCNN/train_file/'
 
 nlp_path: the path for the stanfordnlp.
+
 data_path: where you store the chunked CNN/DaliyMail dataset, for training files, 'path.../train*', for val files , 'path.../val*', for test files, 'path.../test*'.
+
 output_path: where you store the processed pickle file.
+
 The process will take a relatively long time (one to several days).
 
 (2) Train the model:
@@ -57,9 +60,13 @@ The process will take a relatively long time (one to several days).
 python run.py --do_train --device 0 --train_size 32 --checkmin 60000 --checkfreq 6000
 
 device: the gpu used for the training, no support for multiple gpus.
+
 train_size: the batch size.
+
 checkmin: the minimum step for saving the checkpoint.
+
 checkfreq: for every checkfreq step, save a checkpoint.
+
 The checkpoint will be saved in save_model folder.
 
 (3) Test the model:
@@ -67,10 +74,15 @@ The checkpoint will be saved in save_model folder.
 python run.py --do_test --device 0 --test_model 1---1-126000-0.2923-0.3453.pth.tar --block_trigram 1 --ext_num 4
 
 device: the gpu used for the testing, no support for multiple gpus.
+
 test_model: the name of the checkpoint used for testing, the checkpoint should be in the save_model folder.
+
 block_trigram: whether to use the block trigram to reduce the redundancy.
+
 ext_num: the number of the sentences that composed of the summary.
+
 The program will output the result in result folder, checkpoint_cand.txt and checkpoint_gold.txt.
+
 
 ---------------------------------------------------------------------------------------------------------------------------
 
