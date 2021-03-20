@@ -51,9 +51,9 @@ transformers              2.11.0
 The use of the code:
 
 (1) Create the processed pickle files to train the model: 
-
-*python make_data.py --nlp_path /home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05 --data_path 'data/DMCNN/train*' --output_path 'data_file/DMCNN/train_file/'*
-
+```
+python make_data.py --nlp_path /home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05 --data_path 'data/DMCNN/train*' --output_path 'data_file/DMCNN/train_file/'
+```
 nlp_path: the path for the stanfordnlp.
 
 data_path: where you store the chunked CNN/DaliyMail dataset, for training files, 'path.../train*', for val files , 'path.../val*', for test files, 'path.../test*'.
