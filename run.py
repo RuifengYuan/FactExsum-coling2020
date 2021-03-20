@@ -28,7 +28,7 @@ import collections
 def train(config):
 
     if config.pre_train == 0:
-        net = ExtSummarizer()
+        net = ExtSummarizer_F()
     else:
         x=torch.load('save_model/DMCNN/'+config.pre_model,map_location='cpu') #train based on checkpoint
         net=x['model']
@@ -503,6 +503,8 @@ def main():
     torch.cuda.set_device(args.device)
 
     print('CUDA', torch.cuda.current_device())
+    
+    train(args)    
     
     if args.do_train:
 
