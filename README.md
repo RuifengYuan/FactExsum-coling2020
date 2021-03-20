@@ -70,7 +70,7 @@ device: the gpu used for the testing, no support for multiple gpus.
 test_model: the name of the checkpoint used for testing, the checkpoint should be in the save_model folder.
 block_trigram: whether to use the block trigram to reduce the redundancy.
 ext_num: the number of the sentences that composed of the summary.
-The program will output the result in result folder, checkpoint_cand.txt and checkpoint_gold.txt.
+The program will output the result in result folder, checkpoint_cand.txt and checkpoint_gold.txt. 
 ---------------------------------------------------------------------------------------------------------------------------
 
 The output summary of our model "our s+f" is in result folder, the our s+f_cand refers to the standard setting described in our paper and our s+f 6_cand represents the result that extract 6 facts rather than 4 facts.
