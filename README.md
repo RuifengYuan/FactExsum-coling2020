@@ -63,9 +63,9 @@ output_path: where you store the processed pickle file.
 The process will take a relatively long time (one to several days).
 
 (2) Train the model:
-
+```
 python run.py --do_train --device 0 --train_size 32 --checkmin 60000 --checkfreq 6000
-
+```
 device: the gpu used for the training, no support for multiple gpus.
 
 train_size: the batch size.
@@ -77,9 +77,9 @@ checkfreq: for every checkfreq step, save a checkpoint.
 The checkpoint will be saved in save_model folder.
 
 (3) Test the model:
-
+```
 python run.py --do_test --device 0 --test_model 1---1-126000-0.2923-0.3453.pth.tar --block_trigram 1 --ext_num 4
-
+```
 device: the gpu used for the testing, no support for multiple gpus.
 
 test_model: the name of the checkpoint used for testing, the checkpoint should be in the save_model folder.
