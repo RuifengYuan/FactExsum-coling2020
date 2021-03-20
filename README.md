@@ -6,6 +6,8 @@ The chunked data is put in /data/DMCNN/...
 
 If you are interested in the fact-level CNN/DaliyMail dataset described in our paper, you can download them here: https://drive.google.com/file/d/1ma0uuXd5b2EgMUslRIGGF6pVPFHBCIs-/view?usp=sharing.
 
+The best checkpoint can be download with the link below, you can use it with the (3) Test the model.
+https://drive.google.com/file/d/1TbXdybrV1K1-oOvoOaUmosa5MoZ-YDkX/view?usp=sharing
 -----------------------------------------------------------------------------------------------------------------------------
 
 Introduction for the files:
