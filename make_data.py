@@ -4,11 +4,12 @@ import numpy as np
 from transformers import *
 from openie import StanfordOpenIE
 from utility.utility import *
-from bert_serving.client import BertClient
+#from bert_serving.client import BertClient
 from rouge import Rouge
 from stanfordcorenlp import StanfordCoreNLP
 import pickle
 from data.raw_data_loader import *
+import argparse
 '''
 nlp = StanfordCoreNLP('/home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05')
 bc = BertClient(ip='localhost')
@@ -81,6 +82,7 @@ class Example(object):
     for fact in self.article_fact:
         self.article_id.append(self.tokenizer.encode(fact,add_special_tokens=False))
     self.article_len = len(self.article_id) # store the number of sentences of the article 
+    
     # Process the abstract
     self.original_abstract=[]
     self.abstract_fact=[]
@@ -168,6 +170,7 @@ class Example(object):
       """Get the sim sent graph """     
       for i,facti in enumerate(self.article):
           for j,factj in enumerate(self.article):
+              
               scores = self.rougex.get_scores(facti, factj)
               self.grap_sent[i][j]=(scores[0]['rouge-1']['f']+scores[0]['rouge-2']['f'])/2    
             
@@ -329,7 +332,7 @@ class Batcher(object):
 
   BATCH_QUEUE_MAX = 100 # max number of batches the batch_queue can hold
 
-  def __init__(self, data_path, dataset):
+  def __init__(self, data_path, nlp_path):
 
     """Initialize the batcher. Start threads that process the data into batches.
     Args:
@@ -338,7 +341,6 @@ class Batcher(object):
       hps: hyperparameters
       single_pass: If True, run through the dataset exactly once (useful for when you want to run evaluation on the dev or test set). Otherwise generate random batches indefinitely (useful for training).
     """
-    self._dataset=dataset
     self._data_path = data_path
     self._max_len=50
     self._batch_size=4
@@ -349,19 +351,15 @@ class Batcher(object):
     # Initialize the tool
     self.tokenizer=BertTokenizer.from_pretrained('bert-base-uncased')
     self.rougex=Rouge()
-    self.nlp=StanfordCoreNLP('/home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05')
+    self.nlp=StanfordCoreNLP(nlp_path)
     # Different settings depending on whether we're in single_pass mode or not
     self._num_example_q_threads = 1 # just one thread, so we read through the dataset just once
     self._num_batch_q_threads = 1  # just one thread to batch examples
     self._bucketing_cache_size = 50 # only load one batch's worth of examples before bucketing; this essentially means no bucketing
     self._finished_reading = False # this will tell us when we're finished reading the dataset
     #prepear dataloader
-    if self._dataset == 'TLDR':
-        self.input_gen = threadsafe_generator(example_generator_TLDR(self._data_path))
-    if self._dataset == 'MUTIL':
-        self.input_gen = threadsafe_generator(example_generator_MUTIL(self._data_path))
-    if self._dataset == 'DMCNN':
-        self.input_gen = threadsafe_generator(example_generator_DMCNN(self._data_path))
+
+    self.input_gen = threadsafe_generator(example_generator_DMCNN(self._data_path))
 
     print('finish prepearing')
     # Start the threads that load the queues
@@ -500,8 +498,28 @@ print('Total val data:')
 print(countx)
 '''
 
+def argLoader():
 
-train_data_loader=Batcher('data/DMCNN/test*', 'DMCNN')
+    parser = argparse.ArgumentParser()
+    
+    #device
+    
+    parser.add_argument('--nlp_path', type=str, default='/home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05')    
+    
+    # Data Setting
+
+    parser.add_argument('--data_path', type=str, default='data/DMCNN/train*')
+
+    parser.add_argument('--output_path', type=str, default='data_file/DMCNN/train_file/')
+    
+    args = parser.parse_args()
+    
+    return args
+
+
+args = argLoader()
+
+train_data_loader=Batcher(args.data_path, args.nlp_path)
 
 count=0
 countx=0
@@ -510,14 +528,13 @@ while True:
     each_batch_size=len(batch.enc_fact)
     if train_data_loader._finished_reading == True and train_data_loader._batch_queue.qsize() == 0 and train_data_loader._example_queue.qsize() == 0:
         break
-    f=open('data_file/DMCNN/test_file_y/'+str(count)+'_test_batch_of '+str(each_batch_size)+' examples.pkl','wb')  
+    f=open(args.output_path+str(count)+'_batch_of '+str(each_batch_size)+' examples.pkl','wb')  
     pickle.dump(batch,f)  
     f.close() 
     count+=1
     countx+=each_batch_size
-print("test*")
-print('Total test data:')
-print(countx)
+
+print('finish all')
 
 
 

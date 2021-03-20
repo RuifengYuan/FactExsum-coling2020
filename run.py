@@ -24,6 +24,7 @@ from call_rouge import test_rouge, rouge_results_to_str
 
 import collections
 
+
 def train(config):
 
     if config.pre_train == 0:
@@ -274,7 +275,7 @@ def test(config):
     
     rougex=Rouge()
     
-    x=torch.load('save_model/DMCNN/'+config.test_model,map_location='cpu')
+    x=torch.load('save_model/'+config.test_model,map_location='cpu')
 
     net=x['model']
 
@@ -305,7 +306,7 @@ def test(config):
     with open(can_path, 'w') as save_pred:
         with open(gold_path, 'w') as save_gold:
             
-            for batch_idx, batch_path in enumerate(test_filelist[21:22]):
+            for batch_idx, batch_path in enumerate(test_filelist):
 
                 selected_ids=[]
                 src,seg,pos,clss,clsf,mask_clsf,mask_src,lab,fact_article,abstract,true_lab = data_loader_ext_test(batch_path,config)                
@@ -397,16 +398,13 @@ def test(config):
                     scores = rougex.get_scores(_pred, _gold)
                     rouge1.append(scores[0]['rouge-1']['f'])
                     rouge2.append(scores[0]['rouge-2']['f'])
-                    
                 for sent in gold:
                     save_gold.write(sent.strip() + '\n')
                 for sent in pred:
                     save_pred.write(sent.strip() + '\n')
-                    print(sent)
-                print("-----------------")
                 break
 
-    rouges = test_rouge('result/rouge', can_path, gold_path)
+    #rouges = test_rouge('result/rouge', can_path, gold_path)
     '''
     print(rouge_results_to_str(rouges))
     print(np.mean(rouge1))
@@ -458,7 +456,7 @@ def argLoader():
     
     parser.add_argument('--ext_num', type=int, default=4)      
 
-    parser.add_argument('--threshold', type=float, default=0.5)     
+    parser.add_argument('--threshold', type=float, default=1)     
 
     parser.add_argument('--train_size', type=int, default=32)     
     
@@ -474,11 +472,11 @@ def argLoader():
     parser.add_argument('--pre_model', type=str, default='')
     # Testing setting
 
-    parser.add_argument('--block_trigram', type=int, default=0)     
+    parser.add_argument('--block_trigram', type=int, default=1)     
 
     parser.add_argument('--recall_eval', type=int, default=0) 
     
-    parser.add_argument('--test_model', type=str, default='') 
+    parser.add_argument('--test_model', type=str, default='1---1-126000-0.2923-0.3453.pth.tar') 
         
     parser.add_argument('--test_cal', type=str, default='') #lead oracle
     
@@ -505,8 +503,7 @@ def main():
     torch.cuda.set_device(args.device)
 
     print('CUDA', torch.cuda.current_device())
-
-
+    
     if args.do_train:
 
         train(args)
