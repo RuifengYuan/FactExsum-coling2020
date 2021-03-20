@@ -32,12 +32,19 @@ Introduction for the files:
 
 ---------------------------------------------------------------------------------------------------------------------------
 Dependency:
+
 stanford_openie           1.0.3
+
 stanfordcorenlp           3.9.1.1
+
 pyrouge                   0.1.3
+
 rouge                     1.0.0
-pytorch                   1.6.0         
+
+pytorch                   1.6.0    
+
 pytorch-pretrained-bert   0.6.2
+
 transformers              2.11.0
 
 
@@ -45,7 +52,7 @@ The use of the code:
 
 (1) Create the processed pickle files to train the model: 
 
-  python make_data.py --nlp_path /home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05 --data_path 'data/DMCNN/train*' --output_path 'data_file/DMCNN/train_file/'
+*python make_data.py --nlp_path /home/ziqiang/stanfordnlp_resources/stanford-corenlp-full-2018-10-05 --data_path 'data/DMCNN/train*' --output_path 'data_file/DMCNN/train_file/'*
 
 nlp_path: the path for the stanfordnlp.
 
