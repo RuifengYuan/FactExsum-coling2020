@@ -377,11 +377,11 @@ class Classifier(nn.Module):
         return sent_scores
     
     
-class ExtSummarizer(nn.Module):
+class ExtSummarizer_F(nn.Module):
 
     def __init__(self):
 
-        super(ExtSummarizer, self).__init__()
+        super(ExtSummarizer_F, self).__init__()
 
         self.bert = BertModel.from_pretrained('bert-base-uncased')
 
